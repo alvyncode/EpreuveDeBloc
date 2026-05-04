@@ -1,4 +1,7 @@
 ﻿using EpreuveDeBloc.Datas;
+using EpreuveDeBloc.Datas.Repositories;
+using EpreuveDeBloc.Services;
+using EpreuveDeBloc.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -23,7 +26,11 @@ public static class MauiProgram
 		string connectionString = "Server=127.0.0.1;Port=3306;Database=annuaire_db;Uid=root;Pwd=";
         builder.Services.AddDbContext<AppDbContext>(options =>
             options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+		builder.Services.AddSingleton<MainPageViewModel>();
+		builder.Services.AddSingleton<AdminPanelViewModel>();
+		builder.Services.AddTransient<SalarieRepository>();
         builder.Services.AddTransient<MainPage>();
+		
 
         var app = builder.Build();
         InitialiserBaseDeDonnees(app);
@@ -37,7 +44,10 @@ public static class MauiProgram
         using (var scope = app.Services.CreateScope())
         {
             var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-            db.Database.EnsureCreated(); 
+            db.Database.EnsureCreated();
+			
+			var seeder = new DatabaseSeeder(db);
+        	Task.Run(async () => await seeder.SeedDataAsync()).Wait();
         }
     }
 

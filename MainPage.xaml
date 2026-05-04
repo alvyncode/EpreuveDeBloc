@@ -1,13 +1,92 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="EpreuveDeBloc.MainPage">
+             x:Class = "EpreuveDeBloc.MainPage"
+             Title="Annuaire d'Entreprise">
 
-    <ScrollView>
-        <VerticalStackLayout
-            Padding="30,0"
-            Spacing="25">
-        </VerticalStackLayout>
-    </ScrollView>
+    <Grid RowDefinitions="Auto, *" Padding="20" RowSpacing="20">
+        <Label Opacity="0" HeightRequest="0" WidthRequest="0" InputTransparent="True">
+            <FlyoutBase.ContextFlyout>
+                <MenuFlyout>
+                    <MenuFlyoutItem Text="Raccourci Caché" Command="{Binding AllerVersNouvelleVueCommand}">
+                        <MenuFlyoutItem.KeyboardAccelerators>
+                            <!-- Ton raccourci secret est ici -->
+                            <KeyboardAccelerator Modifiers="Ctrl" Key="N" />
+                        </MenuFlyoutItem.KeyboardAccelerators>
+                    </MenuFlyoutItem>
+                </MenuFlyout>
+            </FlyoutBase.ContextFlyout>
+        </Label>
+        <Frame Grid.Row="0" Padding="15" BackgroundColor="#0000" BorderColor="#DEE2E6" CornerRadius="8">
+            <VerticalStackLayout Spacing="15">
+                <Label Text="Rechercher un collaborateur" FontSize="18" FontAttributes="Bold" TextColor="#333333" />
+                <Grid ColumnDefinitions="*, *, *, Auto" ColumnSpacing="15">
+                    
+                    <Entry x:Name="RechercheNomEntry" 
+                           Grid.Column="0" 
+                           Placeholder="Nom du salarié..." 
+                           ClearButtonVisibility="WhileEditing"
+                           Text ="{Binding NomRecherche}" />
+
+                    <Picker x:Name="RechercheSitePicker" 
+                            Grid.Column="1" 
+                            Title="Sélectionner un site"
+                            ItemsSource ="{Binding Villes}"
+                            SelectedItem="{Binding SiteRecherche}"
+                            ItemDisplayBinding="{Binding Nom}"/>
+                    <Picker x:Name="RechercheServicePicker" 
+                            Grid.Column="2" 
+                            Title="Sélectionner un service"
+                            SelectedItem="{Binding ServiceRecherche}"
+                            ItemsSource ="{Binding Services}"
+                            ItemDisplayBinding="{Binding Nom}"/>
+                    <Button x:Name="RechercherButton" 
+                            Grid.Column="3" 
+                            Text="Rechercher" 
+                            BackgroundColor="#0d6efd" 
+                            TextColor="White"
+                            Command ="{Binding RechercheDeSalarieCommand}"/>
+                </Grid>
+                
+            </VerticalStackLayout>
+        </Frame>
+
+        <Grid Grid.Row="1" RowDefinitions="Auto, *" RowSpacing="0">
+
+            <Grid Grid.Row="0" 
+                  ColumnDefinitions="1.5*, 1.5*, 1.2*, 1.2*, 2*, 1.5*, 1.5*" 
+                  BackgroundColor="#343A40" 
+                  Padding="10">
+                <Label Grid.Column="0" Text="Nom" TextColor="White" FontAttributes="Bold"/>
+                <Label Grid.Column="1" Text="Prénom" TextColor="White" FontAttributes="Bold"/>
+                <Label Grid.Column="2" Text="Tél. Fixe" TextColor="White" FontAttributes="Bold"/>
+                <Label Grid.Column="3" Text="Tél. Portable" TextColor="White" FontAttributes="Bold"/>
+                <Label Grid.Column="4" Text="Email" TextColor="White" FontAttributes="Bold"/>
+                <Label Grid.Column="5" Text="Service" TextColor="White" FontAttributes="Bold"/>
+                <Label Grid.Column="6" Text="Site" TextColor="White" FontAttributes="Bold"/>
+            </Grid>
+
+            <CollectionView x:Name="SalariesCollectionView" Grid.Row="1" ItemsSource ="{Binding Users}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid ColumnDefinitions="1.5*, 1.5*, 1.2*, 1.2*, 2*, 1.5*, 1.5*" 
+                              Padding="10">
+                            
+                            <Label Grid.Column="0" Text="{Binding Nom}" VerticalOptions="Center"/>
+                            <Label Grid.Column="1" Text="{Binding Prenom}" VerticalOptions="Center"/>
+                            <Label Grid.Column="2" Text="{Binding NumeroDeTelephoneFixe}" VerticalOptions="Center"/>
+                            <Label Grid.Column="3" Text="{Binding NumeroDeTelephonePortable}" VerticalOptions="Center"/>
+                            <Label Grid.Column="4" Text="{Binding Email}" VerticalOptions="Center" TextColor="#0d6efd"/>
+                            
+                            <Label Grid.Column="5" Text="{Binding Service.Nom}" VerticalOptions="Center"/>
+                            <Label Grid.Column="6" Text="{Binding Site.Nom}" VerticalOptions="Center"/>
+                            
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+        </Grid>
+    </Grid>
 
 </ContentPage>

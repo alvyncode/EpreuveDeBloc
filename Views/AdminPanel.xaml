@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="EpreuveDeBloc.Views.AdminPanel"
+             Title="AdminPanel">
+    <ScrollView>
+        <VerticalStackLayout>
+            <Label Text="Nouveau Salarié" FontSize="24" FontAttributes="Bold" HorizontalOptions="Center" />
+            <HorizontalStackLayout Spacing="20" Padding="20">
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Nom *" FontAttributes="Bold" />
+                    <Entry Placeholder="Ex: Dupont" 
+                        Text="{Binding Nom}" />
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Prénom *" FontAttributes="Bold" />
+                    <Entry Placeholder="Ex: Jean" 
+                        Text="{Binding Prenom}" />
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Site *" FontAttributes="Bold" />
+                    <Entry Placeholder="Saisir le site (ex: Paris)" 
+                        Text="{Binding NomSite}" />
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Fixe *" FontAttributes="Bold" />
+                    <Entry Placeholder="Saisir le numéro du fixe (ex:012334567)" 
+                        Text="{Binding NumeroDeTelephoneFixe}" />
+
+                </VerticalStackLayout>
+                            <VerticalStackLayout Spacing="5">
+                    <Label Text="Portable *" FontAttributes="Bold" />
+                    <Entry Placeholder="Saisir le numéro de téléphone portable (ex:012334567)" 
+                        Text="{Binding NumeroDeTelephonePortable}" />
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Service *" FontAttributes="Bold" />
+                    <Entry Placeholder="Saisir le service (ex: RH)" 
+                        Text="{Binding Email}" />
+                </VerticalStackLayout>
+
+                <Button Text="Save" 
+                        Command="{Binding SauvegarderCommand}" 
+                        BackgroundColor="#198754" 
+                        TextColor="White" 
+                        CornerRadius="8"
+                        Margin="0, 20, 0, 0"/>
+
+            </HorizontalStackLayout>
+            <Grid Grid.Row="1" RowDefinitions="Auto, *" RowSpacing="0">
+
+                <Grid Grid.Row="0" 
+                    ColumnDefinitions="1.5*, 1.5*, 1.2*, 1.2*, 2*, 1.5*, 1.5*" 
+                    BackgroundColor="#343A40" 
+                    Padding="10">
+                    <Label Grid.Column="0" Text="Nom" TextColor="White" FontAttributes="Bold"/>
+                    <Label Grid.Column="1" Text="Prénom" TextColor="White" FontAttributes="Bold"/>
+                    <Label Grid.Column="2" Text="Tél. Fixe" TextColor="White" FontAttributes="Bold"/>
+                    <Label Grid.Column="3" Text="Tél. Portable" TextColor="White" FontAttributes="Bold"/>
+                    <Label Grid.Column="4" Text="Email" TextColor="White" FontAttributes="Bold"/>
+                    <Label Grid.Column="5" Text="Service" TextColor="White" FontAttributes="Bold"/>
+                    <Label Grid.Column="6" Text="Site" TextColor="White" FontAttributes="Bold"/>
+                </Grid>
+
+                <CollectionView x:Name="SalariesCollectionView" Grid.Row="1" ItemsSource ="{Binding Users}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid ColumnDefinitions="1.5*, 1.5*, 1.2*, 1.2*, 2*, 1.5*, 1.5*" 
+                                Padding="10">
+                                
+                                <Label Grid.Column="0" Text="{Binding Nom}" VerticalOptions="Center"/>
+                                <Label Grid.Column="1" Text="{Binding Prenom}" VerticalOptions="Center"/>
+                                <Label Grid.Column="2" Text="{Binding NumeroDeTelephoneFixe}" VerticalOptions="Center"/>
+                                <Label Grid.Column="3" Text="{Binding NumeroDeTelephonePortable}" VerticalOptions="Center"/>
+                                <Label Grid.Column="4" Text="{Binding Email}" VerticalOptions="Center" TextColor="#0d6efd"/>
+                                
+                                <Label Grid.Column="5" Text="{Binding Service.Nom}" VerticalOptions="Center"/>
+                                <Label Grid.Column="6" Text="{Binding Site.Nom}" VerticalOptions="Center"/>
+                                
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+            </Grid>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
