@@ -10,7 +10,7 @@
                 <MenuFlyout>
                     <MenuFlyoutItem Text="Raccourci Caché" Command="{Binding AllerVersNouvelleVueCommand}">
                         <MenuFlyoutItem.KeyboardAccelerators>
-                            <!-- Ton raccourci secret est ici -->
+                            
                             <KeyboardAccelerator Modifiers="Ctrl" Key="N" />
                         </MenuFlyoutItem.KeyboardAccelerators>
                     </MenuFlyoutItem>

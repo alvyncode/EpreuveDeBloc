@@ -87,6 +87,17 @@ public partial class MainPageViewModel : ObservableObject
     [RelayCommand]
     public async Task AllerVersNouvelleVueAsync()
     {
-        await Shell.Current.GoToAsync("AdminPanel");
+        MainThread.BeginInvokeOnMainThread(async () =>
+{
+    try 
+    {
+        await Shell.Current.GoToAsync("AdminMenu");
+    }
+    catch (Exception ex) 
+    {
+        // Mets un point d'arrêt (breakpoint) ici pour lire ex.Message !
+        System.Diagnostics.Debug.WriteLine($"ERREUR : {ex.Message}");
+    }
+});
     }
 }

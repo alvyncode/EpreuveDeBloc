@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="EpreuveDeBloc.Views.AdminMenu"
+             Title="AdminMenu">
+
+    <VerticalStackLayout Padding="30" Spacing="20" VerticalOptions="Center">
+        
+        <Label Text="Bienvenue !" FontSize="32" HorizontalOptions="Center" />
+
+        <!-- Champ nomd'user -->
+        <Entry Placeholder="Nom d'utilisateur" Keyboard="Text" Text="{Binding Username}" />
+
+        <!-- Champ Mot de passe -->
+        <Entry Placeholder="Mot de passe" 
+               Text="{Binding Password}" 
+               IsPassword="True" />
+
+        <!-- Affichage des erreurs (visible seulement s'il y a une erreur) -->
+        <Label Text="{Binding ErrorMessage}" 
+               TextColor="Red" 
+               HorizontalOptions="Center" />
+
+        
+        <Button Text="Se connecter" 
+                Command="{Binding ConnexionCommand}" 
+                CornerRadius="10" />
+                
+    </VerticalStackLayout>
+</ContentPage>

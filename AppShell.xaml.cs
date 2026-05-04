@@ -6,5 +6,6 @@ public partial class AppShell : Shell
 	{
 		InitializeComponent();
 		Routing.RegisterRoute("AdminPanel", typeof(Views.AdminPanel));
+		Routing.RegisterRoute("AdminMenu",typeof(Views.AdminMenu));
 	}
 }

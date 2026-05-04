@@ -29,11 +29,12 @@ public partial class AdminPanelViewModel: ObservableObject
     private string _nomService = string.Empty;
 
     [ObservableProperty]
-    private List<Salarie> _users = new();
+    private List<Salarie> _users;
     public AdminPanelViewModel(SalarieRepository salaryRepo,MainPageViewModel mainPageViewModel)
     {
         _salaryRepo = salaryRepo;
-        Task.Run(async () => await mainPageViewModel.LoadUsersAsync(Users));
+        _users = mainPageViewModel.Users;
+        // Task.Run(async () => await mainPageViewModel.LoadUsersAsync(Users));
     }
 
     [RelayCommand]
