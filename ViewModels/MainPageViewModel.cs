@@ -11,7 +11,7 @@ public partial class MainPageViewModel : ObservableObject
     private readonly SalarieRepository _salaryRepo;
 
     [ObservableProperty]
-    private List<Salarie> _users = new();
+    private ObservableCollection<Salarie> _users = new();
 
     #region Propriétés de chargement
 
@@ -48,10 +48,10 @@ public partial class MainPageViewModel : ObservableObject
         var nullSite = new Site();
         _villes.Add(nullSite);
         
-        Task.Run(async () => await LoadUsersAsync(Users));
+        Task.Run(async () => await LoadUsersAsync(_users));
     }
 
-    public async Task LoadUsersAsync(List<Salarie> users)
+    public async Task LoadUsersAsync(ObservableCollection<Salarie> users)
     {
         try
         {
@@ -82,7 +82,14 @@ public partial class MainPageViewModel : ObservableObject
             SiteId = _siteRecherche?.Id ?? 0, 
             ServiceId = _serviceRecherche?.Id ?? 0 
         };
-        Users = await _salaryRepo.RechercheAsync(salarieRecherche);
+        var resultatsDeRecherche = await _salaryRepo.RechercheAsync(salarieRecherche);
+
+        Users.Clear();
+
+        foreach (var salarie in resultatsDeRecherche)
+        {
+            Users.Add(salarie);
+        }
     }
     [RelayCommand]
     public async Task AllerVersNouvelleVueAsync()
