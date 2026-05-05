@@ -31,6 +31,7 @@ public static class MauiProgram
 		builder.Services.AddTransient<AdminPanelViewModel>();
 		builder.Services.AddTransient<AdminMenuViewModel>();
 		builder.Services.AddTransient<SalarieRepository>();
+		builder.Services.AddTransient<ServiceRepository>();
         builder.Services.AddTransient<AdminPanel>();
         builder.Services.AddTransient<AdminMenu>();
         builder.Services.AddTransient<MainPage>();

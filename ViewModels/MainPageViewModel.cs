@@ -12,6 +12,7 @@ public partial class MainPageViewModel : ObservableObject
 
     [ObservableProperty]
     private ObservableCollection<Salarie> _users = new();
+    private ObservableCollection<Salarie> _allusers = new();
 
     #region Propriétés de chargement
 
@@ -64,6 +65,10 @@ public partial class MainPageViewModel : ObservableObject
                 {
                     users.Add(salarie);
                 }
+                foreach (var salarie in salariesList)
+                {
+                    _allusers.Add(salarie);
+                }
             });
         }
         catch (Exception ex)
@@ -95,16 +100,25 @@ public partial class MainPageViewModel : ObservableObject
     public async Task AllerVersNouvelleVueAsync()
     {
         MainThread.BeginInvokeOnMainThread(async () =>
-{
-    try 
-    {
-        await Shell.Current.GoToAsync("AdminMenu");
+        {
+            try 
+            {
+                await Shell.Current.GoToAsync("AdminMenu");
+            }
+            catch (Exception ex) 
+            {
+                // Mets un point d'arrêt (breakpoint) ici pour lire ex.Message !
+                System.Diagnostics.Debug.WriteLine($"ERREUR : {ex.Message}");
+            }
+        });
     }
-    catch (Exception ex) 
+    [RelayCommand]
+    public void Annuler()
     {
-        // Mets un point d'arrêt (breakpoint) ici pour lire ex.Message !
-        System.Diagnostics.Debug.WriteLine($"ERREUR : {ex.Message}");
-    }
-});
+        _users.Clear();
+        foreach (var user in _allusers)
+        {
+            _users.Add(user);
+        }
     }
 }

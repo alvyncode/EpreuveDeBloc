@@ -20,7 +20,7 @@
         <Frame Grid.Row="0" Padding="15" BackgroundColor="#0000" BorderColor="#DEE2E6" CornerRadius="8">
             <VerticalStackLayout Spacing="15">
                 <Label Text="Rechercher un collaborateur" FontSize="18" FontAttributes="Bold" TextColor="#333333" />
-                <Grid ColumnDefinitions="*, *, *, Auto" ColumnSpacing="15">
+                <Grid ColumnDefinitions="*, *, *, *, Auto" ColumnSpacing="15">
                     
                     <Entry x:Name="RechercheNomEntry" 
                            Grid.Column="0" 
@@ -46,6 +46,12 @@
                             BackgroundColor="#0d6efd" 
                             TextColor="White"
                             Command ="{Binding RechercheDeSalarieCommand}"/>
+                    <Button x:Name="AnnulerButton" 
+                            Grid.Column="4" 
+                            Text="Annuler" 
+                            BackgroundColor="#0d6efd" 
+                            TextColor="White"
+                            Command ="{Binding AnnulerCommand}"/>
                 </Grid>
                 
             </VerticalStackLayout>
@@ -85,6 +91,8 @@
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
+
+            
 
         </Grid>
     </Grid>

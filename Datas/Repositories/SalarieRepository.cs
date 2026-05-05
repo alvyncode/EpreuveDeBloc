@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using EpreuveDeBloc.Models;
 using System.Collections.ObjectModel;
 using System.Text;
+using System.Data;
 
 namespace EpreuveDeBloc.Datas.Repositories;
 
@@ -34,15 +35,18 @@ public class SalarieRepository
         var liste = new ObservableCollection<Salarie>();
 
         //  Récupération de la connexion SQL brute (ADO.NET) depuis Entity Framework
-        using var connection = _context.Database.GetDbConnection();
-        await connection.OpenAsync();
+        var connection = _context.Database.GetDbConnection();
+        if (connection.State != ConnectionState.Open)
+        {
+            await connection.OpenAsync();
+        }
 
         using var command = connection.CreateCommand();
 
         //Requette SQL
         var sql = new StringBuilder(@"
             SELECT 
-                s.Id, s.Nom, s.Prenom, s.SiteId, s.ServiceId,
+                s.Id, s.Nom, s.Prenom, s.NumeroDeTelephoneFixe, s.NumeroDeTelephonePortable, s.Email, s.SiteId, s.ServiceId,
                 si.Id AS SiteIdJoin, si.Nom AS SiteNom,
                 se.Id AS ServiceIdJoin, se.Nom AS ServiceNom
             FROM Salaries s
@@ -98,6 +102,9 @@ public class SalarieRepository
                 // Utilisation de ternaires pour gérer les valeurs NULL potentielles de la DB
                 Nom = reader.IsDBNull(reader.GetOrdinal("Nom")) ? null : reader.GetString(reader.GetOrdinal("Nom")),
                 Prenom = reader.IsDBNull(reader.GetOrdinal("Prenom")) ? null : reader.GetString(reader.GetOrdinal("Prenom")),
+                NumeroDeTelephoneFixe = reader.IsDBNull(reader.GetOrdinal("NumeroDeTelephoneFixe")) ? null : reader.GetString(reader.GetOrdinal("NumeroDeTelephoneFixe")),
+                NumeroDeTelephonePortable = reader.IsDBNull(reader.GetOrdinal("NumeroDeTelephonePortable")) ? null : reader.GetString(reader.GetOrdinal("NumeroDeTelephonePortable")),
+                Email = reader.IsDBNull(reader.GetOrdinal("Email")) ? null : reader.GetString(reader.GetOrdinal("Email")),
                 SiteId = reader.GetInt32(reader.GetOrdinal("SiteId")),
                 ServiceId = reader.GetInt32(reader.GetOrdinal("ServiceId")),
 
@@ -138,6 +145,21 @@ public class SalarieRepository
         paramPrenom.ParameterName = "@prenom";
         paramPrenom.Value = (object)salarie.Prenom ?? DBNull.Value;
         command.Parameters.Add(paramPrenom);
+        
+        var paramNumeroDeTelephoneFixe = command.CreateParameter();
+        paramNumeroDeTelephoneFixe.ParameterName = "@numerodetelephonefixe";
+        paramNumeroDeTelephoneFixe.Value = (object)salarie.NumeroDeTelephoneFixe ?? DBNull.Value;
+        command.Parameters.Add(paramNumeroDeTelephoneFixe);
+
+        var paramNumeroDeTelephonePortable= command.CreateParameter();
+        paramNumeroDeTelephonePortable.ParameterName = "@numerodetelephoneportable";
+        paramNumeroDeTelephonePortable.Value = (object)salarie.NumeroDeTelephonePortable ?? DBNull.Value;
+        command.Parameters.Add(paramNumeroDeTelephonePortable);
+
+        var paramEmail = command.CreateParameter();
+        paramEmail.ParameterName = "@email";
+        paramEmail.Value = (object)salarie.Email ?? DBNull.Value;
+        command.Parameters.Add(paramEmail);
 
         var paramSiteId = command.CreateParameter();
         paramSiteId.ParameterName = "@siteId";
@@ -155,8 +177,8 @@ public class SalarieRepository
             // --- CAS : CRÉATION (INSERT) ---
             // On insère, puis on demande à la base de données de nous renvoyer l'ID fraîchement généré
             command.CommandText = @"
-                INSERT INTO Salaries (Nom, Prenom, SiteId, ServiceId) 
-                VALUES (@nom, @prenom, @siteId, @serviceId);
+                INSERT INTO Salaries (Nom, Prenom,NumeroDeTelephoneFixe,NumeroDeTelephonePortable,Email, SiteId, ServiceId) 
+                VALUES (@nom, @prenom ,@numerodetelephonefixe,@numerodetelephoneportable ,@email, @siteId, @serviceId);
                 SELECT CAST(SCOPE_IDENTITY() as int);"; // Note : SCOPE_IDENTITY() est spécifique à SQL Server
 
             // ExecuteScalarAsync exécute la requête et retourne la première colonne de la première ligne (notre nouvel ID)
@@ -179,7 +201,10 @@ public class SalarieRepository
             command.CommandText = @"
                 UPDATE Salaries 
                 SET Nom = @nom, 
-                    Prenom = @prenom, 
+                    Prenom = @prenom,
+                    NumeroDeTelephoneFixe = @numerodetelephonefixe
+                    NumeroDeTelephonePortable = @numerodetelephoneportable
+                    Email = @email
                     SiteId = @siteId, 
                     ServiceId = @serviceId
                 WHERE Id = @id;";

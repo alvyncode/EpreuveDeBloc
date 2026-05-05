@@ -9,6 +9,7 @@ namespace EpreuveDeBloc.ViewModels;
 public partial class AdminPanelViewModel: ObservableObject
 {
     private readonly SalarieRepository _salaryRepo;
+    private readonly ServiceRepository _serviceRepository;
 
     [ObservableProperty]
     private string _nom = string.Empty;
@@ -37,10 +38,19 @@ public partial class AdminPanelViewModel: ObservableObject
     // Titre dynamique pour le formulaire
     [ObservableProperty]
     private string titreFormulaire = "Nouveau Salarié";
-    public AdminPanelViewModel(SalarieRepository salaryRepo,MainPageViewModel mainPageViewModel)
+    [ObservableProperty]
+    private ObservableCollection<Service> _services;
+
+    [ObservableProperty]
+    private string _newServiceName;
+    public AdminPanelViewModel(SalarieRepository salaryRepo,MainPageViewModel mainPageViewModel,ServiceRepository serviceRepository)
     {
         _salaryRepo = salaryRepo;
         _users = mainPageViewModel.Users;
+        _serviceRepository = serviceRepository;
+        _services = new ObservableCollection<Service>();
+        
+        _ = LoadServicesAsync();
         // Task.Run(async () => await mainPageViewModel.LoadUsersAsync(Users));
     }
     [RelayCommand]
@@ -153,5 +163,40 @@ public partial class AdminPanelViewModel: ObservableObject
         Email = string.Empty;
         NumeroDeTelephoneFixe = string.Empty;
         NumeroDeTelephonePortable = string.Empty;
+    }
+    [RelayCommand]
+    private async Task LoadServicesAsync()
+    {
+        var loadedServices = await _serviceRepository.GetAllServicesAsync();
+        _services.Clear();
+        foreach (var service in loadedServices)
+        {
+            _services.Add(service);
+        }
+    }
+
+    [RelayCommand]
+    private async Task AddServiceAsync()
+    {
+        if (string.IsNullOrWhiteSpace(_newServiceName)) return;
+
+        var newService = new Service
+        {
+            Nom = _newServiceName
+        };
+
+        await _serviceRepository.AddServiceAsync(newService);
+        
+        await LoadServicesAsync();
+        _newServiceName = string.Empty;
+    }
+
+    [RelayCommand]
+    private async Task DeleteServiceAsync(Service serviceToDelete)
+    {
+        if (serviceToDelete == null) return;
+
+        await _serviceRepository.DeleteServiceAsync(serviceToDelete.Id);
+        _services.Remove(serviceToDelete);
     }
 }

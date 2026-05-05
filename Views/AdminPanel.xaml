@@ -4,77 +4,65 @@
              x:Class="EpreuveDeBloc.Views.AdminPanel"
              xmlns:vm="clr-namespace:EpreuveDeBloc.ViewModels"
              Title="AdminPanel">
-    <ScrollView>
-        <VerticalStackLayout>
-            <Label Text="{Binding TitreFormulaire}" FontSize="24" FontAttributes="Bold" HorizontalOptions="Center" />
+             
+    <!-- Grille principale qui coupe l'écran en deux (moitié haut / moitié bas) -->
+    <Grid RowDefinitions="2*, *">
+
+        <!-- ========================================== -->
+        <!-- COMPARTIMENT 1 (HAUT) : Gestion des Salariés -->
+        <!-- ========================================== -->
+        <Grid Grid.Row="0" RowDefinitions="Auto, Auto, *">
             
-            <Grid Grid.Row="0" 
-                    ColumnDefinitions="1.5*, 1.5*, 1.2*, 1.2*, 2*, 1.5*, 1.5*" 
-                    BackgroundColor="#343A40" 
-                    Padding="10">
+            <!-- Titre -->
+            <Label Grid.Row="0" Text="{Binding TitreFormulaire}" FontSize="24" FontAttributes="Bold" HorizontalOptions="Center" Margin="0,10,0,10" />
+            
+            <!-- Formulaire -->
+            <Grid Grid.Row="1" BackgroundColor="#343A40" Padding="10">
                 <HorizontalStackLayout Spacing="20" Padding="20">
                     <VerticalStackLayout Spacing="5">
-                        <Label Text="Nom *" FontAttributes="Bold" />
-                        <Entry Placeholder="Ex: Dupont" 
-                            Text="{Binding Nom}" />
+                        <Label Text="Nom *" FontAttributes="Bold" TextColor="White" />
+                        <Entry Placeholder="Ex: Dupont" Text="{Binding Nom}" BackgroundColor="White" />
                     </VerticalStackLayout>
 
                     <VerticalStackLayout Spacing="5">
-                        <Label Text="Prénom *" FontAttributes="Bold" />
-                        <Entry Placeholder="Ex: Jean" 
-                            Text="{Binding Prenom}" />
+                        <Label Text="Prénom *" FontAttributes="Bold" TextColor="White" />
+                        <Entry Placeholder="Ex: Jean" Text="{Binding Prenom}" BackgroundColor="White" />
                     </VerticalStackLayout>
 
                     <VerticalStackLayout Spacing="5">
-                        <Label Text="Fixe *" FontAttributes="Bold" />
-                        <Entry Placeholder="Saisir le numéro du fixe (ex:012334567)" 
-                            Text="{Binding NumeroDeTelephoneFixe}" />
+                        <Label Text="Fixe *" FontAttributes="Bold" TextColor="White" />
+                        <Entry Placeholder="Saisir le numéro" Text="{Binding NumeroDeTelephoneFixe}" BackgroundColor="White" />
                     </VerticalStackLayout>
 
                     <VerticalStackLayout Spacing="5">
-                        <Label Text="Portable *" FontAttributes="Bold" />
-                        <Entry Placeholder="Saisir le numéro de téléphone portable (ex:012334567)" 
-                            Text="{Binding NumeroDeTelephonePortable}" />
+                        <Label Text="Portable *" FontAttributes="Bold" TextColor="White" />
+                        <Entry Placeholder="Saisir le numéro" Text="{Binding NumeroDeTelephonePortable}" BackgroundColor="White" />
                     </VerticalStackLayout>
 
                     <VerticalStackLayout Spacing="5">
-                        <Label Text="Email *" FontAttributes="Bold" />
-                        <Entry Placeholder="Email (Ex:gg@d.com)"
-                            Text="{Binding Email}" />
+                        <Label Text="Email *" FontAttributes="Bold" TextColor="White" />
+                        <Entry Placeholder="Email (Ex:gg@d.com)" Text="{Binding Email}" BackgroundColor="White" />
                     </VerticalStackLayout>
 
                     <VerticalStackLayout Spacing="5">
-                        <Label Text="Service *" FontAttributes="Bold" />
-                        <Entry Placeholder="Saisir le service (ex: RH)" 
-                            Text="{Binding NomService}" />
+                        <Label Text="Service *" FontAttributes="Bold" TextColor="White" />
+                        <Entry Placeholder="Saisir le service (ex: RH)" Text="{Binding NomService}" BackgroundColor="White" />
                     </VerticalStackLayout>
 
                     <VerticalStackLayout Spacing="5">
-                        <Label Text="Site *" FontAttributes="Bold" />
-                        <Entry Placeholder="Saisir le site (ex: Paris)" 
-                            Text="{Binding NomSite}" />
+                        <Label Text="Site *" FontAttributes="Bold" TextColor="White" />
+                        <Entry Placeholder="Saisir le site (ex: Paris)" Text="{Binding NomSite}" BackgroundColor="White" />
                     </VerticalStackLayout>
 
-                    <Button Text="Save" 
-                            Command="{Binding SauvegarderCommand}" 
-                            BackgroundColor="#198754" 
-                            TextColor="White" 
-                            CornerRadius="8"
-                            Margin="0, 20, 0, 0"/>
-                    <Button Text="Annuler"
-                            Command ="{Binding AnnulerCommand}"
-                            BackgroundColor="#FFC83D01" 
-                            TextColor="White" 
-                            CornerRadius="8"
-                            Margin="0, 20, 0, 0"/>
+                    <Button Text="Save" Command="{Binding SauvegarderCommand}" BackgroundColor="#198754" TextColor="White" CornerRadius="8" Margin="0, 20, 0, 0"/>
+                    <Button Text="Annuler" Command="{Binding AnnulerCommand}" BackgroundColor="#FFC83D01" TextColor="White" CornerRadius="8" Margin="0, 20, 0, 0"/>
                 </HorizontalStackLayout>
             </Grid>
-            <Grid Grid.Row="1" RowDefinitions="Auto, *" RowSpacing="0">
 
-                <Grid Grid.Row="0" 
-                    ColumnDefinitions="1.5*, 1.5*, 1.2*, 1.2*, 2*, 1.5*, 1.5*" 
-                    BackgroundColor="#343A40" 
-                    Padding="10">
+            <!-- Zone de la liste (En-têtes + CollectionView scrollable) -->
+            <Grid Grid.Row="2" RowDefinitions="Auto, *" RowSpacing="0">
+                <!-- En-têtes -->
+                <Grid Grid.Row="0" ColumnDefinitions="1.5*, 1.5*, 1.2*, 1.2*, 2*, 1.5*, 1.5*" BackgroundColor="#343A40" Padding="10">
                     <Label Grid.Column="0" Text="Nom" TextColor="White" FontAttributes="Bold"/>
                     <Label Grid.Column="1" Text="Prénom" TextColor="White" FontAttributes="Bold"/>
                     <Label Grid.Column="2" Text="Tél. Fixe" TextColor="White" FontAttributes="Bold"/>
@@ -84,12 +72,11 @@
                     <Label Grid.Column="6" Text="Site" TextColor="White" FontAttributes="Bold"/>
                 </Grid>
 
-                <CollectionView x:Name="SalariesCollectionView" Grid.Row="1" ItemsSource ="{Binding Users}">
+                <!-- Liste des Salariés (Scrollable grâce au * du Grid parent) -->
+                <CollectionView x:Name="SalariesCollectionView" Grid.Row="1" ItemsSource="{Binding Users}">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Grid ColumnDefinitions="1.5*, 1.5*, 1.2*, 1.2*, 2*, 1.5*, 1.5*, Auto" 
-                                    Padding="10">
-
+                            <Grid ColumnDefinitions="1.5*, 1.5*, 1.2*, 1.2*, 2*, 1.5*, 1.5*, Auto" Padding="10">
                                 <Label Grid.Column="0" Text="{Binding Nom}" VerticalOptions="Center"/>
                                 <Label Grid.Column="1" Text="{Binding Prenom}" VerticalOptions="Center"/>
                                 <Label Grid.Column="2" Text="{Binding NumeroDeTelephoneFixe}" VerticalOptions="Center"/>
@@ -99,34 +86,53 @@
                                 <Label Grid.Column="6" Text="{Binding Site.Nom}" VerticalOptions="Center"/>
 
                                 <HorizontalStackLayout Grid.Column="7" Spacing="10" VerticalOptions="Center">
-
-                                    <Button Text="✏️" 
-                                            BackgroundColor="#ffc107" 
-                                            TextColor="Black"
-                                            WidthRequest="40" 
-                                            HeightRequest="40"
-                                            CornerRadius="20"
-                                            Padding="0"
-                                            Command="{Binding Source={RelativeSource AncestorType={x:Type vm:AdminPanelViewModel}}, Path=ModifierSalarieCommand}"
-                                            CommandParameter="{Binding .}" />
-
-                                    <Button Text="🗑️" 
-                                            BackgroundColor="#dc3545" 
-                                            TextColor="White"
-                                            WidthRequest="40" 
-                                            HeightRequest="40"
-                                            CornerRadius="20"
-                                            Padding="0"
-                                            Command="{Binding Source={RelativeSource AncestorType={x:Type vm:AdminPanelViewModel}}, Path=SupprimerSalarieCommand}"
-                                            CommandParameter="{Binding .}" />
-                                            
+                                    <Button Text="✏️" BackgroundColor="#ffc107" TextColor="Black" WidthRequest="40" HeightRequest="40" CornerRadius="20" Padding="0"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type vm:AdminPanelViewModel}}, Path=ModifierSalarieCommand}" CommandParameter="{Binding .}" />
+                                    <Button Text="🗑️" BackgroundColor="#dc3545" TextColor="White" WidthRequest="40" HeightRequest="40" CornerRadius="20" Padding="0"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type vm:AdminPanelViewModel}}, Path=SupprimerSalarieCommand}" CommandParameter="{Binding .}" />
                                 </HorizontalStackLayout>
                             </Grid>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
-
             </Grid>
-        </VerticalStackLayout>
-    </ScrollView>
+        </Grid>
+
+
+        <!-- ========================================== -->
+        <!-- COMPARTIMENT 2 (BAS) : Gestion des Services-->
+        <!-- ========================================== -->
+        <Grid Grid.Row="1" RowDefinitions="Auto, *">
+
+            <!-- Formulaire d'ajout -->
+            <VerticalStackLayout Grid.Row="0" Margin="10" Spacing="10" Padding="15">
+                <Label Text="Gestion des Services" FontSize="20" FontAttributes="Bold" />
+                <Entry Placeholder="Nom du service" Text="{Binding NewServiceName}" />
+                <Button Text="Ajouter un Service" Command="{Binding AddServiceCommand}" BackgroundColor="#0d6efd" TextColor="White" />
+            </VerticalStackLayout>
+
+            <!-- Liste des Services (Scrollable grâce au * du Grid parent) -->
+            <CollectionView Grid.Row="1" ItemsSource="{Binding Services}" Margin="10">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame Margin="0,5,0,5" Padding="10" CornerRadius="8">
+                            <Grid ColumnDefinitions="*, Auto">
+                                <!-- Infos du service -->
+                                <VerticalStackLayout Grid.Column="0" VerticalOptions="Center">
+                                    <Label Text="{Binding Nom}" FontAttributes="Bold" FontSize="16" />
+                                </VerticalStackLayout>
+                                
+                                <!-- Bouton Supprimer -->
+                                <Button Grid.Column="1" Text="Supprimer" BackgroundColor="Red" TextColor="White"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:AdminPanelViewModel}}, Path=DeleteServiceCommand}"
+                                        CommandParameter="{Binding .}" />
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+        </Grid>
+
+    </Grid>
 </ContentPage>
